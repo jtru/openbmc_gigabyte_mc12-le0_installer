@@ -45,10 +45,10 @@ Usage / Installation
 Once you have acquired or built a compatible **image-bmc**, place it right next
 to the `autoinstall_mc12le0_OpenBMC_via_ssh.sh` script in this repository's
 root directory, find out one of the IP addresses (we're going to assume
-**192.168.2.42** here for demonstration purposes) your MegaRAC BMC can be
+**192.0.2.42** here for demonstration purposes) your MegaRAC BMC can be
 reached via SSH, and invoke the aforementioned script like so:
 
-    ./autoinstall_mc12le0_OpenBMC_via_ssh.sh 192.168.2.42
+    ./autoinstall_mc12le0_OpenBMC_via_ssh.sh 192.0.2.42
 
 While executing, you will be prompted for the `sysadmin` account's password
 twice. After the second prompt, you are invited to lean back and hope for the
@@ -83,13 +83,13 @@ specific location in the OpenBMC file system, and after a reboot (which will
 take a while, since flash erasure and writing takes some time), the BMC will
 boot with the provided image content.
 
-The example below illustrates the process, assuming **192.168.2.42** for the
+The example below illustrates the process, assuming **192.0.2.42** for the
 OpenBMC-running BMC's IP address, and
 **tmp-YYYY-MM-DD_ts_megarac_stock_image.rom.bak** as the filename produced
 during the backup of the original BMC ROM content during OpenBMC installation:
 
-    scp tmp-YYYY-MM-DD_ts_megarac_stock_image.rom.bak root@192.168.2.42:/run/initramfs/image-bmc
-    ssh root@192.168.2.42 reboot
+    scp tmp-YYYY-MM-DD_ts_megarac_stock_image.rom.bak root@192.0.2.42:/run/initramfs/image-bmc
+    ssh root@192.0.2.42 reboot
 
 After a few minutes, your board's BMC should have rebooted into its MegaRAC
 firmware again.
