@@ -20,7 +20,7 @@
 
 if [ -z $1 ] || [ $1 = -h ] || [ $1 = --help ]
 then
-    printf 'Usage: %s MEGARAC_IPADDR\n' "${0%%*/}"
+    printf 'Usage: %s MEGARAC_IPADDR\n' "${0##*/}"
     exit 0
 fi
 
