@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <https://www.gnu.org/licenses/>.
 
-if [ -z $1 ] || [ $1 = -h ] || [ $1 = --help ]
+if [ -z "${1}" ] || [ "${1}" = -h ] || [ "${1}" = --help ]
 then
     printf 'Usage: %s MEGARAC_IPADDR\n' "${0##*/}"
     exit 0
@@ -27,7 +27,7 @@ fi
 missing_progs=''
 for prog in ssh-keyscan ssh python3 mktemp openssl sed date wc grep
 do
-  type -p "${prog}" >/dev/null || missing_progs="${missing_progs} ${prog}"
+  type "${prog}" >/dev/null || missing_progs="${missing_progs} ${prog}"
 done
 
 if [ -n "${missing_progs}" ]
@@ -36,7 +36,7 @@ then
     exit 1
 fi
 
-if ! ssh-keyscan -T 1 -- "${1}" | grep -qF 'SSH-2.0-OpenSSH_7.9p1' &>/dev/null
+if ! ssh-keyscan -T 1 -- "${1}" 2>/dev/null | grep -qF 'SSH-2.0-OpenSSH_7.9p1'
 then
     echo "FATAL: SSH banner check for host ${1:-NO HOST PROVIDED} failed" >&2
     exit 1
@@ -57,7 +57,7 @@ else
     imgmd5="${imgmd5##* }"
 fi
 
-tmpwebsrv="$(mktemp tmp-$(date +%F)-WebServer.XXXXXXX)"
+tmpwebsrv="$(mktemp tmp-"$(date +%F)"-WebServer.XXXXXXX)"
 cat <<EOPYTHON > "${tmpwebsrv}"
 import time
 import os
@@ -76,9 +76,9 @@ if __name__ == '__main__':
     http.server.test(HandlerClass=PUTRequestHandler, port=8123)
 EOPYTHON
 
-httplogfile="$(mktemp tmp-$(date +%F)-WebServer-Log.XXXXXXX)"
+httplogfile="$(mktemp tmp-"$(date +%F)"-WebServer-Log.XXXXXXX)"
 echo "Starting temporary local webserver on TCP port 8123 (logfile @ ${httplogfile} ) ..." >&2
-python3 "${tmpwebsrv}" &> "${httplogfile}" &
+python3 "${tmpwebsrv}" >"${httplogfile}" 2>&1 &
 httppid="${!}"
 trap 'echo Terminating webserver... >&2; kill ${httppid}; rm -f "${tmpwebsrv}" "${tmpscript}"' EXIT
 sleep 1
@@ -89,7 +89,7 @@ then
     exit 1
 fi
 
-tmpscript="$(mktemp tmp-$(date +%F)-OpenBMC-flash.XXXXXXX)"
+tmpscript="$(mktemp tmp-"$(date +%F)"-OpenBMC-flash.XXXXXXX)"
 sed -n '1,/^#===ENDOFLOCALSCRIPT/{d};p' "${0}" > "${tmpscript}"
 
 echo "Transferring generated shellscript to MegaRAC BMC host..." >&2
