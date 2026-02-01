@@ -90,7 +90,7 @@ then
 fi
 
 tmpscript="$(mktemp tmp-"$(date +%F)"-OpenBMC-flash.XXXXXXX)"
-sed -n '1,/^#===ENDOFLOCALSCRIPT/{d};p' "${0}" > "${tmpscript}"
+sed -n '1,/^#===ENDOFLOCALSCRIPT/{d;};p' "${0}" > "${tmpscript}"
 
 echo "Transferring generated shellscript to MegaRAC BMC host..." >&2
 if ! ssh -oPreferredAuthentications=password -oPasswordAuthentication=yes \
